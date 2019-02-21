@@ -1,5 +1,14 @@
+$LOAD_PATH << File.expand_path('lib', __dir__)
+
 require 'sinatra'
 require 'json'
+require 'board'
+require 'hero'
+require 'brain'
+
+def json(plain)
+  plain ? JSON.parse(plain).transform_keys(&:to_sym) : {}
+end
 
 get '/' do
   'Battlesnake documentation can be found at' \
@@ -7,35 +16,32 @@ get '/' do
 end
 
 post '/start' do
-  request_body = request.body.read
-  request_json = request_body ? JSON.parse(request_body) : {}
+  request_json = json(request.body.read)
+  puts request_json.inspect
 
-  # Example response
-  response_object = {
-    color: '#fff000',
-  }
+  hero = Hero.from_json(request_json[:you])
 
-  response_object.to_json
+  hero.configuration.to_json
 end
 
 post '/move' do
-  request_body = request.body.read
-  request_json = request_body ? JSON.parse(request_body) : {}
+  request_json = json(request.body.read)
+  board = Board.from_json(request_json[:board])
+  hero = Hero.from_json(request_json[:you])
+  brain = Brain.new(board: board, snake: hero)
 
-  # Calculate a direction (example)
-  direction = %w[up right].sample
+  move = brain.move
 
   # Example response
   response_object = {
-    move: direction,
+    move: move.to_s,
   }
 
   response_object.to_json
 end
 
 post '/end' do
-  request_body = request.body.read
-  request_json = request_body ? JSON.parse(request_body) : {}
+  request_json = json(request.body.read)
 
   # No response required
   response_object = {}
