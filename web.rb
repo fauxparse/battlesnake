@@ -3,44 +3,44 @@ require 'json'
 
 get '/' do
   'Battlesnake documentation can be found at' \
-    '<a href=\"https://docs.battlesnake.io\">https://docs.battlesnake.io</a>.'
+    '<a href="https://docs.battlesnake.io">https://docs.battlesnake.io</a>.'
 end
 
 post '/start' do
-  requestBody = request.body.read
-  requestJson = requestBody ? JSON.parse(requestBody) : {}
+  request_body = request.body.read
+  request_json = request_body ? JSON.parse(request_body) : {}
 
   # Example response
-  responseObject = {
-    "color"=> "#fff000",
+  response_object = {
+    color: '#fff000',
   }
 
-  return responseObject.to_json
+  response_object.to_json
 end
 
 post '/move' do
-  requestBody = request.body.read
-  requestJson = requestBody ? JSON.parse(requestBody) : {}
+  request_body = request.body.read
+  request_json = request_body ? JSON.parse(request_body) : {}
 
   # Calculate a direction (example)
-  direction = ["up", "right"].sample
+  direction = %w[up right].sample
 
   # Example response
-  responseObject = {
-    "move" => direction
+  response_object = {
+    move: direction,
   }
 
-  return responseObject.to_json
+  response_object.to_json
 end
 
 post '/end' do
-  requestBody = request.body.read
-  requestJson = requestBody ? JSON.parse(requestBody) : {}
+  request_body = request.body.read
+  request_json = request_body ? JSON.parse(request_body) : {}
 
   # No response required
-  responseObject = {}
+  response_object = {}
 
-  return responseObject.to_json
+  response_object.to_json
 end
 
 post '/ping' do
